@@ -1,6 +1,6 @@
 {
   "name": "@cronvel/get-pixels",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Pruned version of the 'get-pixels' package by Mikola Lysenko (only node.js and local fs files)",
   "main": "node-pixels.js",
   "dependencies": {

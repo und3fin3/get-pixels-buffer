@@ -42,7 +42,7 @@ function handleJPEG(data, cb) {
 }
 
 function handleGIF(data, cb) {
-  var reader
+  var reader, nshape, ndata, result
   try {
     reader = new GifReader(data)
   } catch(err) {
@@ -50,9 +50,9 @@ function handleGIF(data, cb) {
     return
   }
   if(reader.numFrames() > 0) {
-    var nshape = [reader.numFrames(), reader.height, reader.width, 4]
-    var ndata = new Uint8Array(nshape[0] * nshape[1] * nshape[2] * nshape[3])
-    var result = ndarray(ndata, nshape)
+    nshape = [reader.numFrames(), reader.height, reader.width, 4]
+    ndata = new Uint8Array(nshape[0] * nshape[1] * nshape[2] * nshape[3])
+    result = ndarray(ndata, nshape)
     try {
       for(var i=0; i<reader.numFrames(); ++i) {
         reader.decodeAndBlitFrameRGBA(i, ndata.subarray(
@@ -65,9 +65,9 @@ function handleGIF(data, cb) {
     }
     cb(null, result.transpose(0,2,1))
   } else {
-    var nshape = [reader.height, reader.width, 4]
-    var ndata = new Uint8Array(nshape[0] * nshape[1] * nshape[2])
-    var result = ndarray(ndata, nshape)
+    nshape = [reader.height, reader.width, 4]
+    ndata = new Uint8Array(nshape[0] * nshape[1] * nshape[2])
+    result = ndarray(ndata, nshape)
     try {
       reader.decodeAndBlitFrameRGBA(0, ndata)
     } catch(err) {
@@ -115,7 +115,7 @@ function doParse(type, data, cb) {
     break
 
     default:
-      cb(new Error("Unsupported file type: " + mimeType))
+      cb(new Error("Unsupported file type: " + type))
   }
 }
 
@@ -136,7 +136,7 @@ module.exports = function getPixels(url, type, cb) {
         cb(err)
         return
       }
-      type = type || extname(path).toLowerCase().substr(1)
+      type = type || extname(url).toLowerCase().substr(1)
 
       if(!type) {
         cb(new Error('Invalid file type'))

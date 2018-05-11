@@ -1,16 +1,13 @@
 'use strict'
 
 var ndarray       = require('ndarray')
-var path          = require('path')
 var PNG           = require('pngjs').PNG
 var jpeg          = require('jpeg-js')
 var pack          = require('ndarray-pack')
 var GifReader     = require('omggif').GifReader
 var Bitmap        = require('node-bitmap')
 var fs            = require('fs')
-var request       = require('request')
-var mime          = require('mime-types')
-var parseDataURI  = require('parse-data-uri')
+var extname       = require('path').extname
 
 function handlePNG(data, cb) {
   var png = new PNG();
@@ -98,22 +95,22 @@ function handleBMP(data, cb) {
 }
 
 
-function doParse(mimeType, data, cb) {
-  switch(mimeType) {
-    case 'image/png':
+function doParse(type, data, cb) {
+  switch(type) {
+    case 'png':
       handlePNG(data, cb)
     break
 
-    case 'image/jpg':
-    case 'image/jpeg':
+    case 'jpg':
+    case 'jpeg':
       handleJPEG(data, cb)
     break
 
-    case 'image/gif':
+    case 'gif':
       handleGIF(data, cb)
     break
 
-    case 'image/bmp':
+    case 'bmp':
       handleBMP(data, cb)
     break
 
@@ -133,51 +130,14 @@ module.exports = function getPixels(url, type, cb) {
       return
     }
     doParse(type, url, cb)
-  } else if(url.indexOf('data:') === 0) {
-    try {
-      var buffer = parseDataURI(url)
-      if(buffer) {
-        process.nextTick(function() {
-          doParse(type || buffer.mimeType, buffer.data, cb)
-        })
-      } else {
-        process.nextTick(function() {
-          cb(new Error('Error parsing data URI'))
-        })
-      }
-    } catch(err) {
-      process.nextTick(function() {
-        cb(err)
-      })
-    }
-  } else if(url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
-    request({url:url, encoding:null}, function(err, response, body) {
-      if(err) {
-        cb(err)
-        return
-      }
-
-      type = type;
-      if(!type){
-        if(response.getHeader !== undefined){
-	  type = response.getHeader('content-type');
-	}else if(response.headers !== undefined){
-	  type = response.headers['content-type'];
-	}
-      }
-      if(!type) {
-        cb(new Error('Invalid content-type'))
-        return
-      }
-      doParse(type, body, cb)
-    })
   } else {
     fs.readFile(url, function(err, data) {
       if(err) {
         cb(err)
         return
       }
-      type = type || mime.lookup(url)
+      type = type || extname(path).toLowerCase().substr(1)
+
       if(!type) {
         cb(new Error('Invalid file type'))
         return

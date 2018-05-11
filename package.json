@@ -1,37 +1,20 @@
 {
-  "name": "get-pixels",
+  "name": "@cronvel/get-pixels",
   "version": "3.3.0",
-  "description": "Reads the pixels of an image as an ndarray",
+  "description": "Pruned version of the 'get-pixels' package by Mikola Lysenko (only node.js and local fs files)",
   "main": "node-pixels.js",
-  "directories": {
-    "test": "test"
-  },
   "dependencies": {
     "ndarray": "^1.0.13",
     "pngjs": "^2.0.0",
     "ndarray-pack": "^1.1.1",
     "jpeg-js": "^0.1.1",
     "omggif": "^1.0.5",
-    "node-bitmap": "0.0.1",
-    "through": "^2.3.4",
-    "request": "^2.44.0",
-    "parse-data-uri": "^0.2.0",
-    "mime-types": "^2.0.1",
-    "data-uri-to-buffer": "0.0.3"
+    "node-bitmap": "0.0.1"
   },
-  "devDependencies": {
-    "tape": "^2.12.3",
-    "brfs": "^1.2.0",
-    "browserify": "^3.44.0",
-    "beefy": "^1.1.0"
-  },
-  "scripts": {
-    "test": "tap test/*.js",
-    "test-browser": "beefy test/test.js --open  -- -t brfs"
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/scijs/get-pixels.git"
+    "url": "git://github.com/cronvel/get-pixels.git"
   },
   "keywords": [
     "ndarray",
@@ -49,13 +32,9 @@
     "buffer",
     "data",
     "parse",
-    "dom",
-    "node",
-    "browserify"
+    "node"
   ],
-  "browser": "dom-pixels.js",
   "author": "Mikola Lysenko",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "380bbda330666e4a4066c48ef5a42770d13bcd5c"
+  "readmeFilename": "README.md"
 }

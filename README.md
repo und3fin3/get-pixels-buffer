@@ -1,7 +1,8 @@
 
 Pruned version of get-pixels:
 - only node.js
-- only local files
+- buffer only
+- async API
 
 See the original package [here](https://npmjs.org/package/get-pixels).
 

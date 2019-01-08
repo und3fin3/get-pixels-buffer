@@ -1,7 +1,7 @@
 {
-  "name": "@cronvel/get-pixels",
+  "name": "@und3fin3/get-pixels",
   "version": "3.3.1",
-  "description": "Pruned version of the 'get-pixels' package by Mikola Lysenko (only node.js and local fs files)",
+  "description": "Pruned version of the 'get-pixels' package by Mikola Lysenko (only node.js and buffers)",
   "main": "node-pixels.js",
   "dependencies": {
     "ndarray": "^1.0.13",
@@ -14,7 +14,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/cronvel/get-pixels.git"
+    "url": "git://github.com/und3fin3/get-pixels-buffer.git"
   },
   "keywords": [
     "ndarray",

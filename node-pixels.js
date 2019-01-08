@@ -6,8 +6,6 @@ var jpeg          = require('jpeg-js')
 var pack          = require('ndarray-pack')
 var GifReader     = require('omggif').GifReader
 var Bitmap        = require('node-bitmap')
-var fs            = require('fs')
-var extname       = require('path').extname
 
 function handlePNG(data, cb) {
   var png = new PNG();
@@ -119,30 +117,27 @@ function doParse(type, data, cb) {
   }
 }
 
-module.exports = function getPixels(url, type, cb) {
-  if(!cb) {
-    cb = type
-    type = ''
-  }
-  if(Buffer.isBuffer(url)) {
-    if(!type) {
-      cb(new Error('Invalid file type'))
-      return
+module.exports = function getPixels(buf) {
+  function compare(a, b) {
+    for(let i in a) {
+      if (a[i] !== b[i]) return false;
     }
-    doParse(type, url, cb)
-  } else {
-    fs.readFile(url, function(err, data) {
-      if(err) {
-        cb(err)
-        return
-      }
-      type = type || extname(url).toLowerCase().substr(1)
-
-      if(!type) {
-        cb(new Error('Invalid file type'))
-        return
-      }
-      doParse(type, data, cb)
-    })
+    return true;
   }
+
+  return new Promise( (resolve, reject) => {
+    var type;
+    if(compare([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], buf))
+      type = 'png';
+    else if(compare([0xff, 0xe0], buf) && compare([0x4a, 0x46, 0x49, 0x46, 0x00], buf.slice(6)))
+      type = 'jpg';
+    else if(compare([0x47, 0x49, 0x46, 0x38]))
+      type = 'gif';
+    else if(compare([0x42, 0x4d], buf))
+      type = 'bmp';
+    else
+      return reject(new Error('Unknown file type'));
+    
+    doParse(type, buf, (err, d) => err ? reject(err) : resolve(d));
+  })
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@und3fin3/get-pixels",
+  "name": "@und3fin3/get-pixels-buffer",
   "version": "3.3.1",
   "description": "Pruned version of the 'get-pixels' package by Mikola Lysenko (only node.js and buffers)",
   "main": "node-pixels.js",
